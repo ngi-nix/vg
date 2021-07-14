@@ -81,7 +81,7 @@ stdenv.mkDerivation {
 
   postUnpack =
     ''
-      sed -i 's/\/bin\/bash/'"$(which bash | sed 's/\//\\\//gm')"'/' ./source/deps/sdsl-lite/{install.sh,build/*.sh}
+      patchShebangs --build ./source/deps/sdsl-lite/ ./source/deps/sdsl-lite/build/
       sed -i 's/return HTSCODECS_VERSION_TEXT;/return '"\"$(grep -oP 'version (\d+\.)+\d+$' ./source/deps/htslib/htscodecs/README.md | grep -oP '(\d+\.)+\d+$')\""';/' ./source/deps/htslib/htscodecs/htscodecs/htscodecs.c 
       sed -i 's/hopscotch_map-prefix\/src\/hopscotch_map\/include\/\*/\''${PWD}\/deps\/DYNAMIC\/deps\/hopscotch_map\/include\/*/' ./source/Makefile
       sed -i 's/\(LD_STATIC_LIB_FLAGS.*\)-lz -lbz2 -llzma/\1/' ./source/Makefile
