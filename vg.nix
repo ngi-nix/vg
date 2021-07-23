@@ -1,6 +1,6 @@
 { fetchFromGitHub
 , stdenv
-, runCommandNoCCLocal
+, callPackage
 , lib
 
 , busybox, which, perl, flex
@@ -16,11 +16,7 @@ let
   pname = "vg";
   version = "1.33.0";
 
-  arch = runCommandNoCCLocal "arch" {}
-    ''
-      mkdir -p $out/bin
-      ln -s ${busybox}/bin/busybox $out/bin/arch
-    '';
+  arch = callPackage ./arch.nix {};
 
   hopscotch_map = fetchFromGitHub {
     owner = "Tessil";
@@ -88,7 +84,7 @@ stdenv.mkDerivation {
 
       (
         cd ./source/deps/DYNAMIC
-        patch -i ${./0001-DYNAMIC-Move-hopscotch_map-to-a-submodule-and-update-CMakeLists.patch} 
+        patch -i ${./patches/0001-DYNAMIC-Move-hopscotch_map-to-a-submodule-and-update-CMakeLists.patch} 
         mkdir -p ./deps
         ln -s ${hopscotch_map} ./deps/hopscotch_map
         ls ./deps/hopscotch_map
