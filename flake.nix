@@ -27,36 +27,14 @@
 
         packages = forAllSystems (system:
           {
-            vita = self.defaultPackage.${system};
+            vg = self.defaultPackage.${system};
           }
         );
 
-        devShell = forAllSystems (system:
-          let
-            pkgs = import nixpkgs { inherit system; overlays = mapAttrsToList (_: id) self.overlays; };
-          in
-            pkgs.mkShell {
-              nativeBuildInputs = with pkgs;
-                [ git pkg-config protobuf
-                  (callPackage ./arch.nix {}) which perl flex
-                  cmake automake autoconf bison
-                ];
-              buildInputs = with pkgs;
-                [ ncurses.dev
-                  jansson
-                  cairo
-                  pcre.dev
-                  xorg.libpthreadstubs
-                  xorg.libXdmcp
-                  libtool
-                  utillinux
-                  curl.dev
-                  libxml2
-                  libxslt.dev
-                  bzip2 lzma zlib.static
-                  boost
-                ];
-            }
-        );
+        defaultApp = self.defaultPackage;
+
+        apss = self.packages;
+
+        devShell = forAllSystems (system: self.packages.${system}.vg);
       };
 }
