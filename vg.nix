@@ -94,6 +94,6 @@ stdenv.mkDerivation {
     description = "Tools for working with genome variation graphs.";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ magic_rb ];
+    maintainers = with maintainers; [ ]; # magic_rb ];
   };
 }
