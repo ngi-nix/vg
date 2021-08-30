@@ -31,9 +31,18 @@
           }
         );
 
-        defaultApp = self.defaultPackage;
+        apps = mapAttrs (_: v:
+          mapAttrs (_: a:
+            {
+              type = "app";
+              program = a;
+            }
+          ) v
+        ) self.packages;
 
-        apss = self.packages;
+        defaultApp = mapAttrs (_: v:
+          v.trydiffoscope
+        ) self.apps;
 
         devShell = forAllSystems (system: self.packages.${system}.vg);
       };
