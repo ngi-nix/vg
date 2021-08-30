@@ -8,6 +8,8 @@
       supportedSystems = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
       forAllSystems' = systems: fun: nixpkgs.lib.genAttrs systems fun;
       forAllSystems = forAllSystems' supportedSystems;
+      pkgsForSystem = system:
+        import nixpkgs { inherit system; overlays = [ self.overlays.vg ]; };
     in
       with nixpkgs.lib;
       {
@@ -20,7 +22,7 @@
 
         defaultPackage = forAllSystems (system:
           let
-            pkgs = import nixpkgs { inherit system; overlays = [ self.overlays.vg ]; };
+            pkgs = pkgsForSystem system;
           in
             pkgs.vg
         );
@@ -45,5 +47,20 @@
         ) self.apps;
 
         devShell = forAllSystems (system: self.packages.${system}.vg);
+
+        hydraJobs = forAllSystems (system:
+          let
+            pkgs = pkgsForSystem system;
+            vg = self.defaultPackage.${system};
+          in
+            {
+              build = self.defaultPackage.${system};
+              test = pkgs.runCommandNoCC "vg-test" {}
+                ''
+                  ${vg}/bin/vg test
+                  touch $out
+                '';
+            }
+        );
       };
 }
