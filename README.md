@@ -5,8 +5,6 @@
 
 vg, tools for working with genome variation graphs.
 
-> :warning: Currently vg requires an ugly hacky patch to build, which when upstream merges [PR#3341](https://github.com/vgteam/vg/pull/3341) will no longer be needed.
-
 ## Using
 
 In order to use this [flake](https://nixos.wiki/wiki/Flakes) you need to have the

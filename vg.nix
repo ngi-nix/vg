@@ -14,16 +14,9 @@
 }:
 let
   pname = "vg";
-  version = "1.33.0";
+  version = "1.34.0";
 
   arch = callPackage ./arch.nix {};
-
-  hopscotch_map = fetchFromGitHub {
-    owner = "Tessil";
-    repo = "hopscotch-map";
-    rev = "848374746a50b3ebebe656611d554cb134e9aeef";
-    sha256 = "sha256-8ChVKK80M1nG5HvhpU3rNrG0nzmYxeKk78e3TB8e+nY=";
-  };
 
   inherit (lib) optionalString;
 in
@@ -79,16 +72,7 @@ stdenv.mkDerivation {
     ''
       patchShebangs --build ./source/deps/sdsl-lite/ ./source/deps/sdsl-lite/build/
       sed -i 's/return HTSCODECS_VERSION_TEXT;/return '"\"$(grep -oP 'version (\d+\.)+\d+$' ./source/deps/htslib/htscodecs/README.md | grep -oP '(\d+\.)+\d+$')\""';/' ./source/deps/htslib/htscodecs/htscodecs/htscodecs.c 
-      sed -i 's/hopscotch_map-prefix\/src\/hopscotch_map\/include\/\*/\''${PWD}\/deps\/DYNAMIC\/deps\/hopscotch_map\/include\/*/' ./source/Makefile
       sed -i 's/\(LD_STATIC_LIB_FLAGS.*\)-lz -lbz2 -llzma/\1/' ./source/Makefile
-
-      (
-        cd ./source/deps/DYNAMIC
-        patch -i ${./patches/0001-DYNAMIC-Move-hopscotch_map-to-a-submodule-and-update-CMakeLists.patch} 
-        mkdir -p ./deps
-        ln -s ${hopscotch_map} ./deps/hopscotch_map
-        ls ./deps/hopscotch_map
-      )
     '';
 
   preBuild = ''
@@ -99,7 +83,7 @@ stdenv.mkDerivation {
     owner = "vgteam";
     repo = "vg";
     rev = "v" + version;
-    sha256 = "sha256-YkbLe3etJHKtNYeK8qm2MLBVzokYb4uaJoyxWPg3Ss4=";
+    sha256 = "sha256-jJqLjVt6lGOHCXineMxt5psW/BfrFW3VI8sl2JDiy+U=";
     fetchSubmodules = true;
   };
 
