@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-21.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.05";
   };
 
   outputs = { nixpkgs, self }:
@@ -15,7 +15,7 @@
       {
         overlays.vg = final: prev:
           {
-            vg = final.callPackage ./vg.nix { protobuf = final.protobuf3_13; };
+            vg = final.callPackage ./vg.nix { };
           };
 
         overlay = self.overlays.vg;

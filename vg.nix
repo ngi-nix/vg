@@ -6,7 +6,7 @@
 , busybox, which, perl, flex
 , git, pkg-config
 , automake, cmake, autoconf, bison
-, protobuf, ncurses, jansson, cairo, pcre, curl, libxml2, libxslt
+, protobuf, ncurses, jansson, cairo, pcre, curl, libxml2, libxslt, zstd, gettext
 , xorg, libXdmcp ? xorg.libXdmcp, libpthreadstubs ? xorg.libpthreadstubs
 , libtool, utillinux
 , bzip2, lzma, zlib
@@ -14,7 +14,7 @@
 }:
 let
   pname = "vg";
-  version = "1.34.0";
+  version = "1.42.0";
 
   arch = callPackage ./arch.nix {};
 
@@ -40,6 +40,8 @@ stdenv.mkDerivation {
       curl.dev
       libxml2
       libxslt.dev
+      zstd.dev
+      gettext
       bzip2 lzma zlib.static
       boost
     ];
@@ -83,7 +85,7 @@ stdenv.mkDerivation {
     owner = "vgteam";
     repo = "vg";
     rev = "v" + version;
-    sha256 = "sha256-jJqLjVt6lGOHCXineMxt5psW/BfrFW3VI8sl2JDiy+U=";
+    sha256 = "sha256-dJDmonPFe34pyxud/bqF3Qic2MRotWV9GpjdCuDap94=";
     fetchSubmodules = true;
   };
 
